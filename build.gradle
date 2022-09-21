@@ -10,6 +10,11 @@ ext {
 }
 println "javaVersion: $javaVersion"
 
+println "__________AllProperties"
+println project.properties
+println "___________SysProperties"
+println System.getProperty("sys.example")
+
 
 
 task hello(description: "Hello task v2", group: "dshidlovskiy") {
