@@ -1,0 +1,36 @@
+println "config phase"
+println "gradle id: ${gradle.hashCode()}"
+println "root: ${rootProject.toString()}"
+
+// При вызове метода task Происходит создание объекта типа DefaultTask
+//ВАРИАНТ 3 передаем Closure сразу при объявлении
+task hello {
+    println "configuration task phase"
+    description = "Hello task"
+    group = "dshidlovskiy"
+}
+//также таск может помимо имени принимать мапу
+task hello2(description: "Hello task v2", group: "dshidlovskiy") {
+    println "configuration phase. Task hello2"
+    println "task: $description, group: $group, action: ${actions.size()}"
+
+    doLast {
+        println "Action1"
+    }
+    doFirst {
+        println "Action2"
+    }
+}
+//каждый Task добавляется в  ТаскКонтейнер Set<Task> откуда их можно доставать
+// и обращаться к полям и методам описанных в DefaultTask
+//tasks.findByName("hello") можно и тут на объекте таск вызывать методы
+// а можно и воспользоваться синтаксис сахаром и обращаться по имени таска
+// 1 вариант
+//hello.description = "Hello task"
+// 2 вариант передать таске сразу объект Closure
+// hello.configure(Closure closure)
+//hello {
+//    println "configuration task phase"
+//    description = "Hello task"
+//    group = "dshidlovskiy"
+//}
