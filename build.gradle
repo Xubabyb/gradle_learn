@@ -1,11 +1,26 @@
 apply from: 'script.gradle'
-apply plugin: CustomPlugin
+//apply plugin: CustomPlugin
+apply plugin: 'java' //устаревший метод, лучше использовать плагин DSL смотри ниже "почему то не работает"
+//plugins {id 'java'}
+
+sourceSets {
+    main {
+        java {
+            srcDir("$buildDir/generated-sources/querydsl")
+        }
+
+    }
+    test {
+
+    }
+}
+
 
 class CustomPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
         def map = [description: "Hello task v2", group: "dshidlovskiy", type: DefaultTask]
-        project.task(map, "hello"){
+        project.task(map, "hello") {
             println "configuration phase. Task hello"
             println "task: $description, group: $group, action: ${actions.size()}"
 
