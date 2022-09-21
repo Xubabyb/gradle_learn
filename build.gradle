@@ -1,6 +1,16 @@
+import java.time.LocalDate
+
 println "config phase"
 println "gradle id: ${gradle.hashCode()}"
 println "root: ${rootProject.toString()}"
+
+ext {
+    javaVersion = 17
+    currentDate = LocalDate.now()
+}
+println "javaVersion: $javaVersion"
+
+
 
 task hello(description: "Hello task v2", group: "dshidlovskiy") {
     println "configuration phase. Task hello"
@@ -38,6 +48,7 @@ task fourth(group: "dshid"){
 fourth.dependsOn second
 second.dependsOn first
 second.finalizedBy third
+//колбэк метод вызывается по готовности таскГрафа
 gradle.taskGraph.whenReady {TaskExecutionGraph graph ->
     println "-------Graph:"
     graph.allTasks.each {
