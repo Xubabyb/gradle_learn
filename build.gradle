@@ -1,68 +1,20 @@
-import java.time.LocalDate
+apply from: 'script.gradle'
+apply plugin: CustomPlugin
 
-println "config phase"
-println "gradle id: ${gradle.hashCode()}"
-println "root: ${rootProject.toString()}"
+class CustomPlugin implements Plugin<Project> {
+    @Override
+    void apply(Project project) {
+        def map = [description: "Hello task v2", group: "dshidlovskiy", type: DefaultTask]
+        project.task(map, "hello"){
+            println "configuration phase. Task hello"
+            println "task: $description, group: $group, action: ${actions.size()}"
 
-ext {
-    javaVersion = 17
-    currentDate = LocalDate.now()
-}
-println "javaVersion: $javaVersion"
-
-println "__________AllProperties"
-println project.properties
-println "___________SysProperties"
-println System.getProperty("sys.example")
-
-
-
-task hello(description: "Hello task v2", group: "dshidlovskiy") {
-    println "configuration phase. Task hello"
-    println "task: $description, group: $group, action: ${actions.size()}"
-
-    doLast {
-        println "Action1"
-    }
-    doFirst {
-        println "Action2"
+            doLast {
+                println "Action1"
+            }
+            doFirst {
+                println "Action2"
+            }
+        }
     }
 }
-//gradle.taskGraph.allTasks возвращает упорядоченный граф тасков в зависимости от установленных связей
-task first{
-    doLast {
-        println "Task1"
-    }
-}
-task second{
-    doLast {
-        println "Task2"
-    }
-}
-task third{
-    doLast {
-        println "Task3"
-    }
-}
-task fourth(group: "dshid"){
-    doLast {
-        println "Task4"
-    }
-}
-// 2<---4
-fourth.dependsOn second
-second.dependsOn first
-second.finalizedBy third
-//колбэк метод вызывается по готовности таскГрафа
-gradle.taskGraph.whenReady {TaskExecutionGraph graph ->
-    println "-------Graph:"
-    graph.allTasks.each {
-        println "${it.name}"
-    }
-}
-gradle.taskGraph.beforeTask {Task task ->
-    if (task.group == "dshid")
-        println "beforeTask callBack $task"
-}
-
-defaultTasks "fourth"

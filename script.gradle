@@ -1,0 +1,58 @@
+import java.time.LocalDate
+
+println "config phase"
+println "gradle id: ${gradle.hashCode()}"
+println "root: ${rootProject.toString()}"
+
+ext {
+    javaVersion = 17
+    currentDate = LocalDate.now()
+}
+println "javaVersion: $javaVersion"
+
+println "__________AllProperties"
+println project.properties
+println "___________SysProperties"
+println System.getProperty("sys.example")
+
+
+
+
+//gradle.taskGraph.allTasks возвращает упорядоченный граф тасков в зависимости от установленных связей
+task first{
+    doLast {
+        println "Task1"
+    }
+}
+task second{
+    doLast {
+        println "Task2"
+    }
+}
+task third{
+    doLast {
+        println "Task3"
+    }
+}
+task fourth(group: "dshid"){
+    doLast {
+        println "Task4"
+    }
+}
+// 2<---4
+fourth.dependsOn second
+second.dependsOn first
+second.finalizedBy third
+//колбэк метод вызывается по готовности таскГрафа
+gradle.taskGraph.whenReady {TaskExecutionGraph graph ->
+    println "-------Graph:"
+    graph.allTasks.each {
+        println "${it.name}"
+    }
+}
+gradle.taskGraph.beforeTask {Task task ->
+    if (task.group == "dshid")
+        println "beforeTask callBack $task"
+}
+
+defaultTasks "fourth"
