@@ -2,6 +2,15 @@ apply from: 'script.gradle'
 //apply plugin: CustomPlugin
 apply plugin: 'java' //устаревший метод, лучше использовать плагин DSL смотри ниже "почему то не работает"
 //plugins {id 'java'}
+// указываем места поиска наших зависимостей помимо локального m2, и центрального мавен репо
+
+
+
+// можем указать еще внутренний Нексус сервис, плюс еще есть грэдл кэш.
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
 
 sourceSets {
     main {

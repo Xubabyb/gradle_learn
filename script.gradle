@@ -9,6 +9,7 @@ ext {
     currentDate = LocalDate.now()
 }
 println "javaVersion: $javaVersion"
+println "Current Date: $currentDate"
 
 println "__________AllProperties"
 println project.properties
